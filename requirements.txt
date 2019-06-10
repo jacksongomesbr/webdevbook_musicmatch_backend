@@ -1,0 +1,5 @@
+django
+djangorestframework
+coverage
+django-cors-headers
+django-filter

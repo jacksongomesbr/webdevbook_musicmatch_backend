@@ -1,0 +1,29 @@
+[
+  {
+    "model": "web.Musica",
+    "pk": 1,
+    "fields": {
+      "titulo": "O Show Tem Que Continuar",
+      "artistas": [
+        1
+      ],
+      "gostar": 0,
+      "naoGostar": 0,
+      "genero": 1,
+      "letra": "a\nb\nc\nd\ne"
+    }
+  },
+  {
+    "model": "web.Musica",
+    "pk": 2,
+    "fields": {
+      "titulo": "Foi Um Rio Que Passou Em Minha Vida",
+      "artistas": [
+        2
+      ],
+      "gostar": 0,
+      "naoGostar": 0,
+      "genero": 1
+    }
+  }
+]

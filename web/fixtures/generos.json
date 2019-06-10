@@ -1,0 +1,30 @@
+[
+  {
+    "model": "web.Genero",
+    "pk": 1,
+    "fields": {
+      "nome": "Samba de Raiz"
+    }
+  },
+  {
+    "model": "web.Genero",
+    "pk": 2,
+    "fields": {
+      "nome": "Pop Brasil"
+    }
+  },
+  {
+    "model": "web.Genero",
+    "pk": 3,
+    "fields": {
+      "nome": "Sucessos Gospel"
+    }
+  },
+  {
+    "model": "web.Genero",
+    "pk": 4,
+    "fields": {
+      "nome": "Bossa Nova"
+    }
+  }
+]

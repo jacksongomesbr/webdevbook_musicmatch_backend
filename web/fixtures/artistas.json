@@ -1,0 +1,18 @@
+[
+  {
+    "model": "web.Artista",
+    "pk": 1,
+    "fields": {
+      "nome": "Beth Carvalho",
+      "url_da_foto": "https://studiosol-a.akamaihd.net/letras/115x115/fotos/9/c/3/3/9c338214befbac4aad199988c2402f4f.jpg"
+    }
+  },
+  {
+    "model": "web.Artista",
+    "pk": 2,
+    "fields": {
+      "nome": "Paulinho da Viola",
+      "url_da_foto": "https://studiosol-a.akamaihd.net/letras/115x115/fotos/3/3/8/4/3384b14c9a8eb1ccb787d1af2791b244.jpg"
+    }
+  }
+]
