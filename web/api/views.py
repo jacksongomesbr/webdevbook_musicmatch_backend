@@ -1,9 +1,10 @@
 from django.db.models import Q
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, status
 from rest_framework.authtoken.models import Token
+from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter, OrderingFilter
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, GenericAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.contrib import auth
@@ -54,20 +55,34 @@ class LoginView(APIView):
             return Response(None, status=403)
 
 
-def logout(request):
-    """
-    Esta view baseada em função realiza o encerramento do acesso do usuário, invalidando o token atual
+class AdminEstatisticasView(APIView):
+    # permission_classes = [permissions.IsAdminUser]
+    """Só permite acessar essa view se o usuário estiver autenticado e for admin"""
 
-    :param request: A requisição HTTP
-    :return:
-    """
-    auth.logout(request)
+    def get(self, request):
+        result = {
+            'musicas': Musica.objects.count(),
+            'artistas': Artista.objects.count(),
+            'generos': Genero.objects.count()
+        }
+
+        return Response(result, status=200)
+
+
+class LogoutView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        auth.logout(request)
+        return Response(None, status=200)
 
 
 class ArtistaViewSet(viewsets.ModelViewSet):
     """
     A view `ArtistaViewSet` implementa o acesso ao model `Artista`
     """
+
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     queryset = Artista.objects.all()
     """O queryset representa todos os artistas"""
@@ -83,6 +98,29 @@ class ArtistaViewSet(viewsets.ModelViewSet):
 
     ordering_fields = ['nome']
     """Os campos que podem ordenar o resultado"""
+
+    @action(detail=True, methods=['post'])
+    def remover_foto(self, request, pk=None):
+        """
+        Esta ação, disponível via POST, remove a foto do artista.
+        O procedimento realizado é o seguinte:
+
+        1. obtém o objeto/registro do artista
+        2. define `None` para a `foto`
+        3. salva o objeto/registro
+
+        :param request:
+        :param pk: O identificador do artista
+        :return:
+        """
+        try:
+            artista = self.get_object()
+            artista.foto = None
+            artista.save()
+            ser = self.get_serializer(artista, many=False)
+            return Response(ser.data, status=status.HTTP_200_OK)
+        except:
+            return Response(None, status=status.HTTP_400_BAD_REQUEST)
 
 
 class GeneroViewSet(viewsets.ModelViewSet):
@@ -121,6 +159,34 @@ class MusicaViewSet(viewsets.ModelViewSet):
 
     filter_backends = (DjangoFilterBackend, SearchFilter, OrderingFilter)
     """O cliente pode aplicar filtros conforme os campos, além de pesquisa e de ordenação"""
+
+    @action(detail=True, methods=['post'])
+    def gostar(self, request, pk=None):
+        try:
+            musica = self.get_object()
+            if musica.gostar is not None:
+                musica.gostar += 1
+            else:
+                musica.gostar = 1
+            musica.save()
+            ser = self.get_serializer(musica, many=False)
+            return Response(ser.data, status=status.HTTP_200_OK)
+        except:
+            return Response(None, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=True, methods=['post'])
+    def nao_gostar(self, request, pk=None):
+        try:
+            musica = self.get_object()
+            if musica.naoGostar is not None:
+                musica.naoGostar += 1
+            else:
+                musica.naoGostar = 1
+            musica.save()
+            ser = self.get_serializer(musica, many=False)
+            return Response(ser.data, status=status.HTTP_200_OK)
+        except:
+            return Response(None, status=status.HTTP_400_BAD_REQUEST)
 
 
 class PesquisaView(APIView):

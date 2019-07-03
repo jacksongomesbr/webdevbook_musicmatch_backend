@@ -14,8 +14,9 @@ router.register(r'musicas', MusicaViewSet, basename='musicas')
 urlpatterns = [
     path('', include(router.urls)),
     path('auth/login/', LoginView.as_view(), name='login'),
-    path('auth/logout/', logout, name='logout'),
+    path('auth/logout/', LogoutView.as_view(), name='logout'),
     path('auth/token/', obtain_auth_token, name='obtain_auth_token'),
     path('pesquisa/', PesquisaView.as_view(), name='pesquisa'),
+    path('estatisticas/', AdminEstatisticasView.as_view(), name='estatisticas'),
     # path('', include('rest_framework.urls', namespace='rest_framework'))
 ]
