@@ -1,2 +1,4 @@
 media/
 htmlconv/
+.venv/
+.coverage
